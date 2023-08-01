@@ -1,4 +1,5 @@
-from flask import Flask, redirect, request, redirect, render_template
+from flask import Flask, redirect, request, redirect, render_template, session
+from flask_session import Session
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -6,6 +7,9 @@ from sklearn.cluster import KMeans
 from sklearn.preprocessing import MinMaxScaler
 
 app = Flask(__name__)
+app.config["SESSION_PERMANENT"] = False
+app.config["SESSION_TYPE"] = "filesystem"
+Session(app)
 
 data_awal = ""
 data_hasil = ""
@@ -13,6 +17,8 @@ dataframe = pd.DataFrame(pd.read_excel("data dosen.xlsx"))
 
 @app.route('/', methods = ['GET', 'POST'])
 def index():
+    if not session.get("username"):
+        return redirect("/login")
     global dataframe
     dataframe = pd.DataFrame(pd.read_excel("data dosen.xlsx"))
     data = dataframe.head().to_json(orient='records')
@@ -25,6 +31,8 @@ def index():
 
 @app.route('/hasil')
 def hasil():
+    if not session.get("username"):
+        return redirect("/login")
     df = pd.DataFrame(pd.read_excel("data dosen.xlsx"))
     
     df['Usia.1'].replace(['Cukup Diprioritaskan', 'Prioritas', 'Sangat Prioritas'], [1,2,3], inplace=True)
@@ -80,9 +88,33 @@ def hasil():
 def data_awal():
     return dataframe.to_json(orient='records')
 
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if session.get("username"):
+        return redirect("/")
+    if request.method == "POST":
+        if request.form.get("username") != "admin" or request.form.get("password") != "admin":
+            return render_template("login.html", error="Username Atau Password Salah!")
+        
+        session["username"] = request.form.get("username")
+        return redirect("/")
+        
+    return render_template("login.html")
+
+@app.route('/logout')
+def logout():
+    session["username"] = None
+    return redirect("/login")
+
+@app.route('/tentang')
+def tentang():
+    if not session.get("username"):
+        return redirect("/login")
+    return render_template("tentang.html")
+
 @app.route('/data-hasil')
 def data_hasil():
     return data_hasil.to_json(orient='records')
 
 if __name__ == "__main__":
-    app.run(debug=False)
+    app.run(debug=True)
