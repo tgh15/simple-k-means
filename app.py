@@ -116,11 +116,11 @@ def tentang():
 @app.route('/data-hasil/<klaster>')
 def dataHasil(klaster):
     if klaster == "klaster_1":
-        return data_hasil[data_hasil["kluster"] == "Kurang Direkomendasikan"].to_json(orient='records')
+        return data_hasil[data_hasil['kluster'] == "Kurang Direkomendasikan"].to_json(orient='records')
     if klaster == "klaster_2":
-        return data_hasil[data_hasil["kluster"] == "Direkomendasikan"].to_json(orient='records')
+        return data_hasil[data_hasil['kluster'] == "Direkomendasikan"].to_json(orient='records')
     if klaster == "klaster_3":
-        return data_hasil[data_hasil["kluster"] == "Sangat Direkomendasikan"].to_json(orient='records')
+        return data_hasil[data_hasil['kluster'] == "Sangat Direkomendasikan"].to_json(orient='records')
     if klaster == "semua":
         return data_hasil.to_json(orient='records')
 
