@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,7 +10,8 @@
         integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
 </head>
-<body >
+
+<body>
     <div class="relative h-screen">
 
         <div class="sidebar bg-blue-400 fixed top-0 bottom-0 p-4" style="width: 250px;">
@@ -25,9 +27,14 @@
                 </li>
             </ul>
         </div>
-        <div class="fixed w-full top-0 left-0 shadow-md p-4 right-0 bg-white flex justify-center flex-col" style="margin-left: 250px; height: 80px; z-index: 100;">
-            <h1 class="text-3xl font-bold">App<span class="text-yellow-400">Landi</span></h1>
-            <p>Aplikasi Rekomendasi Lanjut Studi Dosen</p>
+        <div class="fixed w-full top-0 left-0 shadow-md p-4 right-0 bg-white flex justify-between"
+            style="margin-left: 250px; height: 80px; z-index: 100;">
+            <div class="flex justify-center flex-col">
+                <h1 class="text-3xl font-bold">App<span class="text-yellow-400">Landi</span></h1>
+                <p>Aplikasi Rekomendasi Lanjut Studi Dosen</p>
+            </div>
+            <a href="/logout" class="text-red-400 font-semibold hover:text-red-800"
+                style="margin-right: 250px;">Logout</a>
         </div>
         <div class="main p-4 bg-slate-100 min-h-screen" style="margin-left: 250px; margin-top: 80px;">
             <h1 class="font-semi text-2xl">Hasil Analisis</h1>
@@ -39,42 +46,160 @@
                 <h1 class="text-slate-800 text-lg w-full">Visualisasi Hasil Kluster</h1>
                 <img src="/static/images/hasil-scatter.png" alt="">
             </div>
+            <div class="p-4 border bg-white rounded-md mt-3 flex flex-col items-center">
+                <h1 class="text-slate-800 text-lg">Nilai Skor Silhouette</h1>
+                <p class="text-green-500 font-bold">
+                    {{score}}
+                </p>
+            </div>
             <div class="bg-white p-4 mt-4 border rounded-md">
-                <table id="example" class="display" style="width:100%">
-                    <thead>
-                        <tr>
-                            <th>Nama</th>
-                            <th>Usia</th>
-                            <th>Masa Kerja</th>
-                            <th>Pengalaman Kerja</th>
-                            <th>Nilai BKD 2 Tahun Terakhir</th>
-                            <th>Nilai SKP 2 Tahun Terakhir</th>
-                            <th>Nilai Kehadiran 2 Tahun Terakhir</th>
-                            <th>Spesifikasi</th>
-                            <th>Rasio</th>
-                            <th>Kesediaan Dosen Pengganti</th>
-                            <th>Reputasi dan Status PT Tujuan</th>
-                            <th>Klaster</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tbody">
-                        
-                    </tbody>
-                </table>
+                <!-- Tabs -->
+                <ul id="tabs" class="inline-flex pt-2 px-1 w-full border-b">
+                    <li
+                        class="bg-white px-4 text-gray-800 font-semibold py-2 rounded-t border-t border-r border-l -mb-px">
+                        <a id="default-tab" href="#first">Semua</a></li>
+                    <li class="px-4 text-gray-800 font-semibold py-2 rounded-t"><a href="#second">Klaster 1</a></li>
+                    <li class="px-4 text-gray-800 font-semibold py-2 rounded-t"><a href="#third">Klaster 2</a></li>
+                    <li class="px-4 text-gray-800 font-semibold py-2 rounded-t"><a href="#fourth">Klaster 3</a></li>
+                </ul>
+
+                <!-- Tab Contents -->
+                <div id="tab-contents">
+                    <div id="first" class="p-4">
+                        <table id="semua" class="display" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Nama</th>
+                                    <th>Usia</th>
+                                    <th>Masa Kerja</th>
+                                    <th>Pengalaman Kerja</th>
+                                    <th>Nilai BKD 2 Tahun Terakhir</th>
+                                    <th>Nilai SKP 2 Tahun Terakhir</th>
+                                    <th>Nilai Kehadiran 2 Tahun Terakhir</th>
+                                    <th>Spesifikasi</th>
+                                    <th>Rasio</th>
+                                    <th>Kesediaan Dosen Pengganti</th>
+                                    <th>Reputasi dan Status PT Tujuan</th>
+                                    <th>Klaster</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody1">
+        
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="second" class="hidden p-4">
+                        <table id="klaster_1" class="display" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Nama</th>
+                                    <th>Usia</th>
+                                    <th>Masa Kerja</th>
+                                    <th>Pengalaman Kerja</th>
+                                    <th>Nilai BKD 2 Tahun Terakhir</th>
+                                    <th>Nilai SKP 2 Tahun Terakhir</th>
+                                    <th>Nilai Kehadiran 2 Tahun Terakhir</th>
+                                    <th>Spesifikasi</th>
+                                    <th>Rasio</th>
+                                    <th>Kesediaan Dosen Pengganti</th>
+                                    <th>Reputasi dan Status PT Tujuan</th>
+                                    <th>Klaster</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody2">
+        
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="third" class="hidden p-4">
+                        <table id="klaster_2" class="display" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Nama</th>
+                                    <th>Usia</th>
+                                    <th>Masa Kerja</th>
+                                    <th>Pengalaman Kerja</th>
+                                    <th>Nilai BKD 2 Tahun Terakhir</th>
+                                    <th>Nilai SKP 2 Tahun Terakhir</th>
+                                    <th>Nilai Kehadiran 2 Tahun Terakhir</th>
+                                    <th>Spesifikasi</th>
+                                    <th>Rasio</th>
+                                    <th>Kesediaan Dosen Pengganti</th>
+                                    <th>Reputasi dan Status PT Tujuan</th>
+                                    <th>Klaster</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody3">
+        
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="fourth" class="hidden p-4">
+                        <table id="klaster_3" class="display" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Nama</th>
+                                    <th>Usia</th>
+                                    <th>Masa Kerja</th>
+                                    <th>Pengalaman Kerja</th>
+                                    <th>Nilai BKD 2 Tahun Terakhir</th>
+                                    <th>Nilai SKP 2 Tahun Terakhir</th>
+                                    <th>Nilai Kehadiran 2 Tahun Terakhir</th>
+                                    <th>Spesifikasi</th>
+                                    <th>Rasio</th>
+                                    <th>Kesediaan Dosen Pengganti</th>
+                                    <th>Reputasi dan Status PT Tujuan</th>
+                                    <th>Klaster</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody4">
+        
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white p-4 mt-4 border rounded-md">
+                
             </div>
         </div>
 
     </div>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" type="text/javascript"></script>
 
     <script>
-        window.onload = async() => {
-            let table = document.querySelector('#tbody')
-            const response = await fetch("/data-hasil");
-            const datas = await response.json();
+        window.onload = async () => {
+            let table1 = document.querySelector('#tbody1')
+            let table2 = document.querySelector('#tbody2')
+            let table3 = document.querySelector('#tbody3')
+            let table4 = document.querySelector('#tbody4')
+
+            const response1 = await fetch("/data-hasil/semua");
+            const response2 = await fetch("/data-hasil/klaster_1");
+            const response3 = await fetch("/data-hasil/klaster_2");
+            const response4 = await fetch("/data-hasil/klaster_3");
+
+            const datas = await response1.json();
+            const data1 = await response2.json();
+            const data2 = await response3.json();
+            const data3 = await response4.json();
+
             console.log(datas)
-            datas.map((data) => {
+
+            toTable(datas, table1)
+            toTable(data1, table2)
+            toTable(data2, table3)
+            toTable(data3, table4)
+
+            new simpleDatatables.DataTable('#semua');
+            new simpleDatatables.DataTable('#klaster_1');
+            new simpleDatatables.DataTable('#klaster_2');
+            new simpleDatatables.DataTable('#klaster_3');
+        }
+
+        function toTable(datas, table){
+            return datas.map((data) => {
                 table.innerHTML += `
                     <tr>
                         <td>${data['Nama']}</td>
@@ -92,9 +217,37 @@
                     </tr>
                 `
             })
-
-            new simpleDatatables.DataTable('#example');
         }
+
+
+        let tabsContainer = document.querySelector("#tabs");
+
+        let tabTogglers = tabsContainer.querySelectorAll("#tabs a");
+
+        console.log(tabTogglers);
+
+        tabTogglers.forEach(function (toggler) {
+            toggler.addEventListener("click", function (e) {
+                e.preventDefault();
+
+                let tabName = this.getAttribute("href");
+
+                let tabContents = document.querySelector("#tab-contents");
+
+                for (let i = 0; i < tabContents.children.length; i++) {
+
+                    tabTogglers[i].parentElement.classList.remove("border-t", "border-r", "border-l", "-mb-px", "bg-white"); tabContents.children[i].classList.remove("hidden");
+                    if ("#" + tabContents.children[i].id === tabName) {
+                        continue;
+                    }
+                    tabContents.children[i].classList.add("hidden");
+
+                }
+                e.target.parentElement.classList.add("border-t", "border-r", "border-l", "-mb-px", "bg-white");
+            });
+        });
+
     </script>
 </body>
+
 </html>

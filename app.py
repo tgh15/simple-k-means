@@ -5,6 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import MinMaxScaler
+from sklearn.metrics import silhouette_score
 
 app = Flask(__name__)
 app.config["SESSION_PERMANENT"] = False
@@ -69,7 +70,7 @@ def hasil():
     data_hasil = dataframe.copy()
     data_hasil["kluster"] = df["kluster"]
     data_hasil["kluster"].replace([0,1,2], ["Kurang Direkomendasikan", "Direkomendasikan", "Sangat Direkomendasikan"], inplace=True)
-
+    score=silhouette_score(x_scaled, kmeans.labels_)
     output = plt.scatter(x_scaled[:,0], x_scaled[:,1], s = 100, c = df.kluster, marker = "o", alpha = 1, )
     centers = kmeans.cluster_centers_
     plt.scatter(centers[:,0], centers[:,1], c='red', s=200, alpha=1 , marker="o")
@@ -81,7 +82,7 @@ def hasil():
     plt.close()
     plt.switch_backend('agg')
     
-    return render_template("hasil.html")
+    return render_template("hasil.html", score=score)
 
 
 @app.route('/data-awal')
@@ -112,9 +113,16 @@ def tentang():
         return redirect("/login")
     return render_template("tentang.html")
 
-@app.route('/data-hasil')
-def data_hasil():
-    return data_hasil.to_json(orient='records')
+@app.route('/data-hasil/<klaster>')
+def data_hasil(klaster):
+    if klaster == "klaster_1":
+        return data_hasil[data_hasil["kluster"] == "Kurang Direkomendasikan"].to_json(orient='records')
+    if klaster == "klaster_2":
+        return data_hasil[data_hasil["kluster"] == "Direkomendasikan"].to_json(orient='records')
+    if klaster == "klaster_3":
+        return data_hasil[data_hasil["kluster"] == "Sangat Direkomendasikan"].to_json(orient='records')
+    if klaster == "semua":
+        return data_hasil.to_json(orient='records')
 
 if __name__ == "__main__":
     app.run(debug=True)
