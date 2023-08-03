@@ -114,7 +114,7 @@ def tentang():
     return render_template("tentang.html")
 
 @app.route('/data-hasil/<klaster>')
-def data_hasil(klaster):
+def dataHasil(klaster):
     if klaster == "klaster_1":
         return data_hasil[data_hasil["kluster"] == "Kurang Direkomendasikan"].to_json(orient='records')
     if klaster == "klaster_2":
